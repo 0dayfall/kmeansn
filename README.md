@@ -17,6 +17,14 @@ To install from the latest `main`:
 brew install --HEAD 0dayfall/tap/kmeansn
 ```
 
+### Ubuntu (binary release)
+
+```
+VERSION=0.1.0
+curl -L https://github.com/0dayfall/kmeansn/releases/download/v${VERSION}/kmeansn_${VERSION}_Linux_x86_64.tar.gz | tar -xz
+sudo install -m755 kmeansn /usr/local/bin/kmeansn
+```
+
 ### Cargo (from source)
 
 ```
