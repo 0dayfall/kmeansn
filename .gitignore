@@ -1,0 +1,10 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# Editor
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
