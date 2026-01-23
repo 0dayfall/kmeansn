@@ -11,14 +11,27 @@ on:
         required: true
         default: "v0.1.0"
 
+permissions:
+  contents: write
+
 jobs:
   linux:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag != '' && inputs.tag || github.ref_name }}
     steps:
+      - name: Ensure tag
+        shell: bash
+        run: |
+          if [[ "${TAG}" != v* ]]; then
+            echo "TAG must start with v (got ${TAG})"
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag || github.ref_name }}
+          ref: ${{ env.TAG }}
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -30,7 +43,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          TAG="${{ inputs.tag || github.ref_name }}"
+          TAG="${TAG}"
           VERSION="${TAG#v}"
           mkdir -p dist
           tar -C target/release -czf "dist/kmeansn_${VERSION}_Linux_x86_64.tar.gz" kmeansn
@@ -38,5 +51,5 @@ jobs:
       - name: Upload to release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ inputs.tag || github.ref_name }}
+          tag_name: ${{ env.TAG }}
           files: dist/kmeansn_*_Linux_x86_64.tar.gz
