@@ -21,7 +21,14 @@ brew install --HEAD 0dayfall/tap/kmeansn
 
 ```
 VERSION=0.1.0
-curl -L https://github.com/0dayfall/kmeansn/releases/download/v${VERSION}/kmeansn_${VERSION}_Linux_x86_64.tar.gz | tar -xz
+ARCH="$(uname -m)"
+case "${ARCH}" in
+  x86_64) ARCH=x86_64 ;;
+  aarch64|arm64) ARCH=arm64 ;;
+  *) echo "unsupported arch: ${ARCH}" && exit 1 ;;
+esac
+
+curl -L "https://github.com/0dayfall/kmeansn/releases/download/v${VERSION}/kmeansn_${VERSION}_Linux_${ARCH}.tar.gz" | tar -xz
 sudo install -m755 kmeansn /usr/local/bin/kmeansn
 ```
 
