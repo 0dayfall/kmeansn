@@ -19,11 +19,8 @@ pub fn run(args: AssignArgs) -> Result<(), Box<dyn std::error::Error>> {
 
     let input_source = reader::input_source(args.input.clone());
     let input_format = format::resolve_input_format(args.input.as_deref(), args.input_format)?;
-    let output_format = format::resolve_output_format(
-        args.output.as_deref(),
-        args.output_format,
-        input_format,
-    )?;
+    let output_format =
+        format::resolve_output_format(args.output.as_deref(), args.output_format, input_format)?;
 
     let mut input = reader::open_input(&input_source)?;
     let points = match input_format {

@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Dataset {
     pub columns: Vec<String>,
     pub has_id: bool,
@@ -6,9 +6,6 @@ pub struct Dataset {
 
 impl Dataset {
     pub fn new() -> Self {
-        Self {
-            columns: Vec::new(),
-            has_id: false,
-        }
+        Self::default()
     }
 }

@@ -48,15 +48,16 @@ pub fn read_points<R: Read>(
             }
         }
 
-        let id = obj.get("id").and_then(|v| v.as_str()).map(|s| s.to_string());
+        let id = obj
+            .get("id")
+            .and_then(|v| v.as_str())
+            .map(|s| s.to_string());
         if id.is_some() {
             dataset.has_id = true;
         }
         let mut coords = Vec::with_capacity(dataset.columns.len());
         for col in &dataset.columns {
-            let raw = obj
-                .get(col)
-                .ok_or_else(|| "missing field".to_string())?;
+            let raw = obj.get(col).ok_or_else(|| "missing field".to_string())?;
             let value = raw
                 .as_f64()
                 .ok_or_else(|| "feature value must be a number".to_string())?;
@@ -82,7 +83,13 @@ pub fn write_assigned_points<W: Write>(
             }
         }
         for (col, value) in dataset.columns.iter().zip(assigned.point.coords.iter()) {
-            obj.insert(col.clone(), Value::Number(serde_json::Number::from_f64(*value).ok_or_else(|| "invalid float".to_string())?));
+            obj.insert(
+                col.clone(),
+                Value::Number(
+                    serde_json::Number::from_f64(*value)
+                        .ok_or_else(|| "invalid float".to_string())?,
+                ),
+            );
         }
         obj.insert(
             "_cluster_id".to_string(),
@@ -90,8 +97,10 @@ pub fn write_assigned_points<W: Write>(
         );
         obj.insert(
             "_cluster_distance".to_string(),
-            Value::Number(serde_json::Number::from_f64(assigned.cluster_distance)
-                .ok_or_else(|| "invalid float".to_string())?),
+            Value::Number(
+                serde_json::Number::from_f64(assigned.cluster_distance)
+                    .ok_or_else(|| "invalid float".to_string())?,
+            ),
         );
 
         let line = serde_json::to_string(&obj)?;
@@ -116,8 +125,10 @@ pub fn write_neighbors<W: Write>(
         );
         obj.insert(
             "distance".to_string(),
-            Value::Number(serde_json::Number::from_f64(row.distance)
-                .ok_or_else(|| "invalid float".to_string())?),
+            Value::Number(
+                serde_json::Number::from_f64(row.distance)
+                    .ok_or_else(|| "invalid float".to_string())?,
+            ),
         );
         obj.insert(
             "rank".to_string(),

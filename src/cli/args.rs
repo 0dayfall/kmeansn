@@ -1,10 +1,11 @@
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
 
 use crate::io::format::Format;
 
 #[derive(Parser, Debug)]
 #[command(name = "kmeansn")]
+#[command(version)]
 #[command(about = "K-means clustering for CSV/NDJSON streams", long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
@@ -43,6 +44,19 @@ pub struct FitArgs {
     /// RNG seed for centroid initialization
     #[arg(long)]
     pub seed: Option<u64>,
+
+    /// Centroid initialization strategy
+    #[arg(long, value_enum, default_value_t = InitArg::KmeansPlusPlus)]
+    pub init: InitArg,
+}
+
+#[derive(Debug, Clone, Copy, ValueEnum)]
+pub enum InitArg {
+    /// k-means++ seeding (better spread, more stable clusters)
+    #[value(name = "kmeans++", alias = "plusplus")]
+    KmeansPlusPlus,
+    /// Uniform random sampling of input points
+    Random,
 }
 
 #[derive(Args, Debug)]

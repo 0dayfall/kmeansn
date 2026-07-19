@@ -7,11 +7,8 @@ pub fn run(args: ClusterNeighborsArgs) -> Result<(), Box<dyn std::error::Error>>
     let mut centroids_reader = reader::open_input(&reader::InputSource::File(args.centroids))?;
     let centroids_file = centroids_json::read_centroids(&mut centroids_reader)?;
 
-    let output_format = format::resolve_output_format(
-        args.output.as_deref(),
-        args.output_format,
-        Format::Csv,
-    )?;
+    let output_format =
+        format::resolve_output_format(args.output.as_deref(), args.output_format, Format::Csv)?;
 
     let rows = neighbors::centroid_neighbors(&centroids_file.centroids, args.neighbors);
 

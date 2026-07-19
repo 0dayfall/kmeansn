@@ -35,9 +35,7 @@ pub fn open_input(source: &InputSource) -> Result<Box<dyn BufRead>, Box<dyn std:
     }
 }
 
-pub fn open_output(
-    target: &OutputTarget,
-) -> Result<Box<dyn Write>, Box<dyn std::error::Error>> {
+pub fn open_output(target: &OutputTarget) -> Result<Box<dyn Write>, Box<dyn std::error::Error>> {
     match target {
         OutputTarget::Stdout => Ok(Box::new(BufWriter::new(std::io::stdout()))),
         OutputTarget::File(path) => Ok(Box::new(BufWriter::new(File::create(path)?))),

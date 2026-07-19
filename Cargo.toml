@@ -1,11 +1,17 @@
 [package]
 name = "kmeansn"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
+description = "K-means clustering and centroid neighbor analysis for CSV/NDJSON streams, built for Unix pipelines"
+license = "MIT"
+repository = "https://github.com/0dayfall/kmeansn"
+readme = "README.md"
+keywords = ["kmeans", "clustering", "cli", "csv", "ndjson"]
+categories = ["command-line-utilities", "science", "mathematics"]
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 csv = "1.3"
-rand = "0.8"
+rand = "0.9"

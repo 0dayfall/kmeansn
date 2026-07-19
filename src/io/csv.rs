@@ -49,9 +49,13 @@ pub fn read_points<R: Read>(
     let mut points = Vec::new();
     for record in csv.records() {
         let record = record?;
-        let id = id_index
-            .and_then(|idx| record.get(idx))
-            .and_then(|s| if s.is_empty() { None } else { Some(s.to_string()) });
+        let id = id_index.and_then(|idx| record.get(idx)).and_then(|s| {
+            if s.is_empty() {
+                None
+            } else {
+                Some(s.to_string())
+            }
+        });
 
         let mut coords = Vec::with_capacity(indices.len());
         for &idx in &indices {

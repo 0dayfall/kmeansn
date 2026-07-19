@@ -1,5 +1,5 @@
 use crate::algo::kmeans;
-use crate::cli::args::FitArgs;
+use crate::cli::args::{FitArgs, InitArg};
 use crate::io::{centroids_json, csv, format, ndjson, reader};
 use crate::model::Dataset;
 
@@ -17,7 +17,11 @@ pub fn run(args: FitArgs) -> Result<(), Box<dyn std::error::Error>> {
         return Err("no feature columns found".into());
     }
 
-    let fit = kmeans::fit(&points, args.clusters, args.max_iters, args.seed)?;
+    let init = match args.init {
+        InitArg::KmeansPlusPlus => kmeans::Init::PlusPlus,
+        InitArg::Random => kmeans::Init::Random,
+    };
+    let fit = kmeans::fit(&points, args.clusters, args.max_iters, args.seed, init)?;
     let centroids_file = centroids_json::CentroidsFile::from_fit(&dataset, &fit);
 
     let output_target = reader::output_target(args.output);
